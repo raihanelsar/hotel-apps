@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
-class DashboardController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,8 +14,9 @@ class DashboardController extends Controller
     public function index()
     {
         //
-        $title = 'Data User';
-        return view('dashboard');
+        $datas = User::orderBy('id', 'desc')->get();
+        $title = "Data User";
+        return view('user.index', compact('datas', 'title'));
     }
 
     /**
@@ -22,6 +25,8 @@ class DashboardController extends Controller
     public function create()
     {
         //
+        $title = "Tambah User";
+        return view('user.create', compact('title'));
     }
 
     /**
@@ -30,6 +35,8 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         //
+        User::create($request->all());
+        return redirect()->to('user');
     }
 
     /**
@@ -46,6 +53,9 @@ class DashboardController extends Controller
     public function edit(string $id)
     {
         //
+        $edit = User::find($id);
+        $title = "Ubah Pengguna";
+        return view('user.edit', compact('edit', 'title'));
     }
 
     /**
@@ -54,6 +64,15 @@ class DashboardController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+        ];
+        if ($request->password) {
+            $data['password'] = $request->password;
+        }
+        User::where('id', $id)->update($data);
+        return redirect()->to('user');
     }
 
     /**
@@ -62,5 +81,7 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {
         //
+        User::find($id)->delete();
+        return redirect()->to('user');
     }
 }

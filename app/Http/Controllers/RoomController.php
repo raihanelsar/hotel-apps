@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Rooms;
+use App\Models\Categories;
 
-class DashboardController extends Controller
+class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-        $title = 'Data User';
-        return view('dashboard');
+        $datas = Rooms::with('category')->orderBy('id', 'desc')->get();
+        $title = "Data Kamar";
+        return view('rooms.index', compact('datas', 'title'));
     }
 
     /**
@@ -21,7 +23,9 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Categories::get();
+        $title = "Tambah Kamar";
+        return view('rooms.create', compact('categories', 'title'));
     }
 
     /**
@@ -29,7 +33,18 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'facility' => $request->facility,
+            'description' => $request->description,
+        ];
+        if ($request->hasFile('image_cover')) {
+            $data['image_cover'] = $request->file('image_cover')->store("rooms", "public");
+        }
+        Rooms::create($data);
+        return redirect()->to('rooms');
     }
 
     /**
