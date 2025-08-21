@@ -24,7 +24,7 @@
                         @foreach ($datas as $keydatas => $valuedatas)
                             <tr>
                             <td>{{ $keydatas += 1 }}</td>
-                            <td>{{ $valuedatas->name }}</td>
+                            <td><img src="{{asset ('storage/' . $valuedatas->image_cover) }}" alt="" width="100"></td>
                             <td>{{ $valuedatas->category->name }}</td>
                             <td>{{ $valuedatas->name }}</td>
                             <td>{{ number_format ($valuedatas->price) }}</td>
