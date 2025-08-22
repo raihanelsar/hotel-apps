@@ -1,5 +1,5 @@
 @extends('app')
-@section('pagetitle', "Tambah Kategori")
+@section('pagetitle', "Tambah Kategori Kamar")
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -9,7 +9,7 @@
                 <form action="{{ route('categories.store') }}" method="post">
                     @csrf
     <div class="mb-3">
-    <label for="" class="form-label">Name</label>
+    <label for="" class="form-label">Nama *</label>
     <input type="text" class="form-control" placeholder="Input kategori anda" required name="name">
     </div>
     <div class="mb-3">

@@ -1,10 +1,11 @@
 @extends('app')
-@section('title', 'Tambah Pengguna')
+@section('title', 'Tambah Kamar')
 @section('content')
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
+
                 <h3 class="card-title">
                     <form action="{{ route('rooms.store') }}" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
