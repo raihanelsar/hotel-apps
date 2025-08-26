@@ -17,6 +17,9 @@ Route::resource('user', \App\Http\Controllers\UserController::class);
 Route::resource('categories', \App\Http\Controllers\CategoriesController::class);
 Route::resource('rooms', \App\Http\Controllers\RoomController::class);
 Route::resource('guests', \App\Http\Controllers\GuestController::class);
+Route::resource('reservation', \App\Http\Controllers\ReservationsController::class);
+
+Route::get('get-room-by-category/{id}', [\App\Http\Controllers\ReservationsController::class, 'getRoomByCategory'])->name('get-room-by-category');
 
 
 Route::get('call_name', [\App\Http\Controllers\BelajarController::class, 'getCallName']);

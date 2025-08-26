@@ -35,8 +35,8 @@
                             <label for="" class="form-label">Deskripsi *</label>
                             <textarea class="form-control" name="description" cols="30" rows="10" required></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="image_cover">Foto Kamar</label>
+                        <div class="mb-3">
+                            <label for="image_cover">Gambar</label>
                             <input type="file" name="image_cover" class="form-control" required>
                          </div>
                         <div class="mb-3">

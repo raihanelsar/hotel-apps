@@ -41,6 +41,13 @@
                            <span>Guest</span>
                        </a>
                    </li>
+
+                    <li class="nav-item">
+                       <a class="nav-link collapsed" href="{{ route('reservation.index') }} ">
+                           <i class="bi bi-calendar"></i>
+                           <span>Reservasi</span>
+                       </a>
+                   </li>
                 </ul>
             </li><!-- End Components Nav -->
 

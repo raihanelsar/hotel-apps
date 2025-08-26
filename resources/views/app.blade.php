@@ -52,7 +52,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>{{ $title }} </h1>
+            <h1>{{ $title ?? '' }}</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -87,6 +87,36 @@
 
     <!-- Template Main JS File -->
     <script src="{{asset ('assets/js/main.js')}}"></script>
+    <script>
+        //variable
+        // let, var, const
+
+        let category_id = document.getElementById('category_id');
+        let roomId = document.getElementById('room_id');
+        category_id.addEventListener('change', async function(){
+            const id_category = this.value;
+            roomId.innerHTML = "<option value=''>Pilih kamar..</option>"
+
+                const res = await fetch(`/get-room-by-category/${id_category}`);
+
+                const data = await res.json();
+                data.data.forEach(room => {
+                   const option = document.createElement('option');
+                   option.value = room.id;
+                   option.textContent = `${room.name}`;
+                   option.setAttribute('data-price', room.price);
+                   roomId.appendChild(option);
+                });
+
+                console.log("data", data);
+        });
+
+        roomId.addEventListener('change', function(){
+            const selectedOption = this.options[this.selectedIndex];
+            const price = selectedOption.getAttribute('data-price') || 0;
+            document.getElementById('roomRate').textContent = "Rp." + price;
+        });
+    </script>
 
 </body>
 
