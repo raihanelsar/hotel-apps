@@ -23,7 +23,8 @@
 
                                     <div class="mb-3">
                                         <label for="" class="form-label">Kategori Kamar *</label>
-                                        <select name="category_id" id="category_id" class="form-control">                     <option value="">Pilih Kategori Kamar</option>
+                                        <select name="category_id" id="category_id" class="form-control">
+                                            <option value="">Pilih Kategori Kamar</option>
                                             @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{$category->name}} </option>
                                             @endforeach
@@ -41,8 +42,13 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label for="" class="form-label">Check In *</label>
+                                        <input type="date" id="checkin" name="guest_check_in" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label for="" class="form-label">Metode bayar *</label>
-                                        <select name="guest_room_number" id="" class="form-control">
+                                        <select name="payment_method" id="" class="form-control">
                                         <option value="">Pilih metode bayar</option>
                                         <option value="cc">Credit Card</option>
                                         <option value="cash">Cash</option>
@@ -69,7 +75,7 @@
                                     <div class="mb-3">
                                     <label for="" class="form-label">Nama Kamar*</label>
                                     <select name="room_id" id="room_id" class="form-control">
-                                        <option value="">Pilih Kamar</option>
+                                         <option value="">Pilih Kamar</option>
                                     </select>
                                 </div>
 
@@ -77,6 +83,12 @@
                                         <label for="" class="form-label">Special Request/Note *</label>
                                         <textarea name="guest_note" id="" class="form-control"></textarea>
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Check Out *</label>
+                                        <input type="date" id="checkout" name="guest_check_out" class="form-control">
+                                    </div>
+
                                 <div class="card bg-light">
                                     <div class="card-body">
                                         <h6 class="card-title">Rangkuman Pembayaran</h6>
@@ -99,6 +111,7 @@
                                         <div class="d-flex justify-content-between">
                                             <span>Grandtotal</span>
                                             <span id="totalAmount">Rp.0</span>
+
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +124,7 @@
                          </div> --}}
 
                         <div class="mb-3">
-                           <button type="submit" class="btn btn-primary">Simpan</button>
+                           <button type="submit" class="btn btn-primary" id="save" type="button">Simpan</button>
                            <a href="{{ url()->previous() }}" class="text-muted">Kembali</a>
                         </div>
                     </form>

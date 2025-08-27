@@ -19,14 +19,14 @@
                             <th>CheckIn</th>
                             <th>CheckOut</th>
                             <th>Status</th>
-                            <th>Tamu</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datas as $index => $datas)
+                        @foreach ($datas as $index => $data)
                             <tr>
                             <td>{{ $index += 1 }}</td>
-                            <td>{{ $data->guest_name }}</td>
+                            <td>{{ $data->room_id }}</td>
                             <td>{{ $data->reservation_number }}</td>
                             <td>
                                 <small>
@@ -41,12 +41,11 @@
                             <td>{{ $data->guest_checkout }}</td>
                             <td>{{ $data->isReserve }}</td>
                             <td>
-                                <a href="{{ route('reservation.edit', $valuedatas->id) }}" class="btn btn-success">Edit</a>
-                                <form action="{{ route('categories.destroy', $valuedatas->id) }}" method="post" class="d-inline">
+                                <a href="{{ route('reservation.edit', $data->id) }}" class="btn btn-success">Edit</a>
+                                <form action="{{ route('reservation.destroy', $data->id) }}" method="post" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-<button class="btn btn-danger">Delete</button>
-
+                                    <button class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
                         </tr>
