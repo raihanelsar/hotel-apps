@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 26, 2025 at 10:01 AM
+-- Generation Time: Aug 28, 2025 at 08:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -186,8 +186,8 @@ CREATE TABLE `password_reset_tokens` (
 
 CREATE TABLE `reservations` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `room_id` bigint(20) UNSIGNED NOT NULL,
-  `reservation_number` varchar(50) NOT NULL,
+  `room_id` bigint(20) NOT NULL,
+  `reservation_number` varchar(50) DEFAULT '',
   `guest_name` varchar(255) NOT NULL,
   `guest_email` varchar(50) DEFAULT NULL,
   `guest_phone` varchar(15) DEFAULT NULL,
@@ -196,14 +196,32 @@ CREATE TABLE `reservations` (
   `guest_qty` varchar(10) DEFAULT NULL,
   `guest_check_in` date NOT NULL,
   `guest_check_out` date NOT NULL,
-  `guest_note` text DEFAULT NULL,
+  `guest_note` text NOT NULL,
   `isOnline` tinyint(4) DEFAULT 0,
   `isReserve` tinyint(4) DEFAULT 0,
-  `subtotal` decimal(15,2) NOT NULL,
-  `totalAmount` decimal(15,2) NOT NULL,
+  `subtotal` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `totalAmount` decimal(15,2) NOT NULL DEFAULT 0.00,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `guest_room_number` varchar(20) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `nights` decimal(15,2) NOT NULL,
+  `tax` decimal(15,2) NOT NULL,
+  `roomRate` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reservations`
+--
+
+INSERT INTO `reservations` (`id`, `room_id`, `reservation_number`, `guest_name`, `guest_email`, `guest_phone`, `guest_status`, `guest_id`, `guest_qty`, `guest_check_in`, `guest_check_out`, `guest_note`, `isOnline`, `isReserve`, `subtotal`, `totalAmount`, `created_at`, `updated_at`, `guest_room_number`, `payment_method`, `nights`, `tax`, `roomRate`) VALUES
+(1, 1, '', 'asdasdaa', 'sdaxqwe@example.com', '123413432', '', '', '', '2025-08-27', '2025-08-30', 'asfasdad', 0, 0, 150000.00, 150000.00, '2025-08-27 00:32:04', '2025-08-27 00:32:04', '1', 'cash', 0.00, 0.00, 0.00),
+(3, 2, 'RSV-270893-001', 'zxczxc', 'axczxc@example.com', '123123424', NULL, NULL, NULL, '2025-08-27', '2025-08-29', 'asdasdas', 0, 0, 200000.00, 200000.00, '2025-08-27 19:42:26', '2025-08-27 19:42:26', '2', 'cash', 2.00, 20000.00, 100000.00),
+(8, 3, 'RSV-270893-001', 'asdsdfsf', 'sdaxqwe@example.com', '2234123', NULL, NULL, NULL, '2025-08-21', '2025-08-24', 'scscfasdf', 0, 0, 600000.00, 660000.00, '2025-08-27 20:11:58', '2025-08-27 20:11:58', '3', 'cash', 3.00, 60000.00, 200000.00),
+(9, 4, 'RSV-270893-001', 'xzczvaswd', 'asdaczx@umar.com', '12314324', NULL, NULL, NULL, '2025-08-22', '2025-08-25', 'vcvbsdfaf', 0, 0, 750000.00, 825000.00, '2025-08-27 20:15:58', '2025-08-27 20:15:58', '4', 'cash', 3.00, 75000.00, 250000.00),
+(11, 1, 'RSV-270893-001', 'asdasdaa', 'sdaxqwe@example.com', '0899421', NULL, NULL, NULL, '2025-08-29', '2025-08-30', 'asasa', 0, 0, 50000.00, 55000.00, '2025-08-27 20:25:58', '2025-08-27 20:25:58', '1', 'cc', 1.00, 5000.00, 50000.00),
+(12, 1, 'RSV-270893-001', 'asdasdaa', 'sdaxqwe@example.com', '0899421', NULL, NULL, NULL, '2025-08-29', '2025-08-30', 'asasa', 0, 0, 50000.00, 55000.00, '2025-08-27 20:26:49', '2025-08-27 20:26:49', '1', 'cc', 1.00, 5000.00, 50000.00),
+(13, 1, 'RSV-270893-001', 'asdasdaa', 'sdaxqwe@example.com', '1212', NULL, NULL, NULL, '2025-08-28', '2025-08-29', 'asas', 0, 0, 50000.00, 55000.00, '2025-08-27 20:30:12', '2025-08-27 20:30:12', '2', 'cc', 1.00, 5000.00, 50000.00);
 
 -- --------------------------------------------------------
 
@@ -229,7 +247,9 @@ CREATE TABLE `rooms` (
 
 INSERT INTO `rooms` (`id`, `category_id`, `name`, `price`, `facility`, `description`, `image_cover`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Warga', 50000.00, 'asasa', 'asasa', 'rooms/lhhUAVZO0Nnhdt8ABvKHy9bR14bX3mxFCfSrk5hv.jpg', '2025-08-26 00:01:10', '2025-08-26 00:01:10'),
-(2, 2, 'Bangsawan', 100000.00, 'zxczxcas', 'asdrqweq', 'rooms/CCiKNxNH22vl97H12Z5OTP2Ao5szIS6TnTRDyWfc.jpg', '2025-08-26 00:51:24', '2025-08-26 00:51:24');
+(2, 2, 'Bangsawan', 100000.00, 'zxczxcas', 'asdrqweq', 'rooms/CCiKNxNH22vl97H12Z5OTP2Ao5szIS6TnTRDyWfc.jpg', '2025-08-26 00:51:24', '2025-08-26 00:51:24'),
+(3, 3, 'Andalusia', 200000.00, 'asdadfasd', 'asdasdafas', 'rooms/6vbdRXCLuOLmXyIY1c7bngxsEOu2LMl16zOc0Aww.jpg', '2025-08-27 20:11:17', '2025-08-27 20:11:17'),
+(4, 4, 'Rashkan', 250000.00, 'dfsfasfasda', 'sdazxc', 'rooms/wfoeGxc4i3oujrMw4w8wExH1AwppfAokqqVSNL9t.jpg', '2025-08-27 20:15:19', '2025-08-27 20:15:19');
 
 -- --------------------------------------------------------
 
@@ -251,7 +271,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('aYUQ4PMo6r27c5o3P2WBOxoVlXT57wzrXy52LfHC', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNUVQR2hyc0VDckJ0d0trV29kald2d0t1Sjc2UFgwUHZQRGp6bHFKUyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDQ6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9nZXQtcm9vbS1ieS1jYXRlZ29yeS8yIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1756194776);
+('ArrUNbiMUp2A64SewGep1VxftEYHvn5ftNoIM7ZR', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoia2E3Z0NYSlcyUmtLN1ZJQzlBTkRZT0R3UGg4Tk5RMFFQakIxcmc3SyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9yZXNlcnZhdGlvbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1756354522);
 
 -- --------------------------------------------------------
 
@@ -406,13 +426,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
