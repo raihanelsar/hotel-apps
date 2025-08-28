@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained('room')->onDelete('cascade');
+            $table->unsignedBigInteger('room_id')->nullable()->change();
             $table->string('reservation_number', 50);
             $table->string('guest_name');
             $table->string('guest_email', 50)->nullable();

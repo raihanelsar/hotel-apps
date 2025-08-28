@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservations;
 use App\Models\Rooms;
 use App\Models\Categories;
+use Carbon\Carbon;
 
 
 class ReservationsController extends Controller
@@ -13,9 +14,29 @@ class ReservationsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function createReservationNumber()
+    {
+        $code_format = 'RSV';
+        $today = Carbon::now()->format('Ymd'); // akan menghasilkan format YYYMMDD
+        $prefix = $code_format . "-" . $today . "-";
+        $lastReservation = Reservations::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first(); //first akan mengambil data langung berbentuk {data}, sedangkat get akan mengambil semua data dan berbentuk array [{data}]
+
+        if ($lastReservation) {
+            $lastNumber = substr($lastReservation->reservation_number, -3); // akan mengambil 3 data/kata dari belakang dari $lastReservation (untuk mengambil id)
+            // $lastNumber = $lastReservation->id; // atau gunakan line ini (untuk mengambil id)
+            $newNumber = str_pad($lastNumber, 3, "0", STR_PAD_RIGHT); // akan
+        } else {
+            $newNumber = "001";
+        }
+
+        $reservation_number = $prefix . $newNumber;
+
+        return $reservation_number;
+    }
+
     public function index()
     {
-        $datas = Reservations::orderBy('id', 'desc')->get();
+        $datas = Reservations::with('room')->orderBy('id', 'desc')->get();
         $title = "Data Reservasi";
         return view('reservation.index', compact('datas', 'title'));
     }
@@ -27,7 +48,8 @@ class ReservationsController extends Controller
     {
         $categories = Categories::get();
         $title = "Data Reservasi";
-        return view('reservation.create', compact('categories', 'title'));
+        $reservation_number = $this->createReservationNumber();
+        return view('reservation.create', compact('title', 'categories', 'reservation_number'));
     }
 
     /**
@@ -35,42 +57,53 @@ class ReservationsController extends Controller
      */
     public function store(Request $request)
     {
+        $reservation_number = "RSV-270893-001";
+
         // Validasi data dari form
-        $data = $request->validate([
-            'room_id'           => 'required',
-            'reservation_number' => 'required',
-            'guest_name'        => 'required|string|max:255',
-            'guest_email'       => 'required|email',
-            'guest_phone'       => 'required|string|max:15',
-            'guest_note'        => 'nullable|string',
-            'guest_room_number' => 'required|integer',
-            'guest_check_in'    => 'required|date',
-            'guest_check_out'   => 'required|date|after_or_equal:guest_check_in',
-            'payment_method'    => 'required',
-        ]);
+        // $data = $request->validate([
+        //     'room_id'            => 'required',
+        //     'reservation_number' => 'required',
+        //     'guest_name'         => 'required|string|max:255',
+        //     'guest_email'        => 'required|email',
+        //     'guest_phone'        => 'required|string|max:15',
+        //     'guest_note'         => 'nullable|string',
+        //     'guest_room_number'  => 'required|integer',
+        //     'guest_check_in'     => 'required|date',
+        //     'guest_check_out'    => 'required|date|after_or_equal:guest_check_in',
+        //     'payment_method'     => 'required',
+        //     'tax'                => 'nullable',
+        // ]);
 
-        // Ambil harga kamar
-        $room = Rooms::findOrFail($request->room_id);
+        try {
+            $data = [
+                'reservation_number' => $request->reservation_number,
+                'guest_name' => $request->guest_name,
+                'guest_email' => $request->guest_email,
+                'guest_phone' => $request->guest_phone,
+                'guest_note' => $request->guest_note,
+                'guest_room_number' => $request->guest_room_number,
+                'guest_check_in' => $request->guest_check_in,
+                'guest_check_out' => $request->guest_check_out,
+                'payment_method' => $request->payment_method,
+                'room_id' => $request->room_id,
+                'subtotal' => $request->subtotal,
+                'totalAmount' =>  $request->totalAmount,
+                'tax'      => $request->tax,
+                'nights'    => $request->nights,
+                'roomRate'  => $request->roomRate,
+                'isReserve' => 1,
+            ];
 
-        // Hitung jumlah malam
-        $checkIn  = new \DateTime($request->guest_check_in);
-        $checkOut = new \DateTime($request->guest_check_out);
-        $days = $checkIn->diff($checkOut)->days;
 
-        // Hitung subtotal
-        $subtotal = $room->price * $days;
+            // Simpan reservasi
+            $create = Reservations::create($data);
 
-        $totalAmount = $subtotal;
-
-        // Simpan reservasi
-        Reservations::create([
-            $data,
-            'subtotal' => $subtotal,
-            'totalAmount' => $totalAmount,
-        ]);
-
-        return redirect()->route('reservation.index')->with('success', 'Reservasi berhasil dibuat!');
+            return response()->json(['status' => 'success', 'message' => 'Reservation success', 'data' => $create], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'success', 'message' => $th->getMessage()], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.

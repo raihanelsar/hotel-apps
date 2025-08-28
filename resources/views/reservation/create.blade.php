@@ -95,6 +95,7 @@
                                         <div class="d-flex justify-content-between">
                                             <span>Harga Kamar (Per malam)</span>
                                             <span id="roomRate">Rp.0</span>
+                                            <input type="hidden" id="roomRateVal">
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <span>Berapa Malam</span>
@@ -103,15 +104,17 @@
                                         <div class="d-flex justify-content-between">
                                             <span>Subtotal</span>
                                             <span id="subtotal">Rp.0</span>
+                                            <input type="hidden" id="subtotalVal">
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <span>Tax (10%)</span>
                                             <span id="tax">Rp.0</span>
+                                            <input type="hidden" id="taxVal">
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <span>Grandtotal</span>
                                             <span id="totalAmount">Rp.0</span>
-
+                                            <input type="hidden" id="totalAmountVal">
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +127,7 @@
                          </div> --}}
 
                         <div class="mb-3">
-                           <button type="submit" class="btn btn-primary" id="save" type="button">Simpan</button>
+                           <button class="btn btn-primary" id="save" type="button">Simpan</button>
                            <a href="{{ url()->previous() }}" class="text-muted">Kembali</a>
                         </div>
                     </form>
@@ -134,4 +137,32 @@
     </div>
 
 </div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h4 class="mb-3">Reservasi Berhasil!!</h4>
+        <p class="text-muted mb-4">
+            Nomor Reservasi : <strong id="reservationNumber">#</strong>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"><i class="bi bi-print">Print Confirmation</i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection

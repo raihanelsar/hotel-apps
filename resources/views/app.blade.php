@@ -130,7 +130,7 @@
         const selectedOption = this.options[this.selectedIndex];
         roomRate = selectedOption.getAttribute('data-price')|| 0;
         roomRateText.textContent = rupiahFormat(roomRate);
-
+        document.getElementById('roomRateVal').value = roomRate;
         });
 
         const checkInInput = document.getElementById('checkin');
@@ -146,6 +146,7 @@
                 const night = timeDiff / (1000 * 60 * 60 * 24); //86.400.000
 
                 const subTotal = roomRate * night;
+
                 const tax = subTotal * 0.1;
                 const grandTotal = subTotal + tax; //22000
 
@@ -153,6 +154,10 @@
                 subTotalText.textContent = rupiahFormat(subTotal);
                 taxText.textContent = rupiahFormat(tax);
                 totalAmountText.textContent = rupiahFormat(grandTotal);
+
+                document.getElementById('subtotalVal').value = subTotal;
+                document.getElementById('taxVal').value = tax;
+                document.getElementById('totalAmountVal').value = grandTotal;
             }
         }
 
@@ -167,17 +172,17 @@
             const guest_room_number = document.querySelector('select[name=guest_room_number]').value;
             const guest_note = document.querySelector('textarea[name=guest_note]').value;
             const guest_qty = document.querySelector('select[name=guest_qty]').value;
-            const guest_checkin = document.querySelector('input[name=guest_checkin]').value;
-            const guest_checkout = document.querySelector('input[name=guest_checkout]').value;
+            const guest_checkin = document.querySelector('input[name=guest_check_in]').value;
+            const guest_checkout = document.querySelector('input[name=guest_check_out]').value;
             const payment_method = document.querySelector('select[name=payment_method]').value;
-            const subtotal = document.querySelector('#subtotal').textContent;
+            const subtotal = document.querySelector('#subtotalVal').value;
             const nights = document.querySelector('#totalNight').textContent;
-            const tax = document.querySelector('#tax').textContent;
-            const totalAmount = document.querySelector('#totalAmount').textContent;
-            const token = document.querySelector("meta[name='csrf-token']").getAttribute('content')
+            const tax = document.querySelector('#taxVal').value;
+            const totalAmount = document.querySelector('#totalAmountVal').value;
+            const token = document.querySelector("meta[name='csrf-token']").getAttribute('content');
             const reservation_number = "RSV-270893-001";
+            // const roomRate = document.querySelector('#roomRateVal').value;
             const data = {
-                room_id: room_id,
                 reservation_number: reservation_number,
                 guest_name: guest_name,
                 guest_email: guest_email,
@@ -185,13 +190,15 @@
                 guest_room_number: guest_room_number,
                 guest_note: guest_note,
                 guest_qty: guest_qty,
-                guest_checkin: guest_checkin,
-                guest_checkout: guest_checkout,
+                room_id: room_id,
+                guest_check_in: guest_checkin,
+                guest_check_out: guest_checkout,
                 payment_method: payment_method,
                 subtotal: subtotal.replace('/[^\d]/g', ''),
-                nights: nights,
                 tax: tax,
+                nights: nights,
                 totalAmount: totalAmount.replace('/[^\d]/g', ''),
+                roomRate: roomRate,
             }
             try {
                 const res = await fetch(`/reservation`, {
@@ -206,6 +213,8 @@
 
                 }); //get
                 const result = await res.json();
+                console.log(res);
+
                 if (res.ok) {
                     alert('Success');
                 }
